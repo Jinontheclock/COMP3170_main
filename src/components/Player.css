@@ -1,0 +1,60 @@
+.player {
+    border-radius: 40px;
+    width: 40rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2em;
+    background: none;
+}
+
+.player .buttons {
+    display: flex;
+    align-items: center;
+}
+
+.player .buttons svg {
+    margin: 0.5em;
+    transition: transform 0.2s;
+}
+
+.player .buttons svg:hover {
+    transform: scale(1.1);
+}
+
+.player .bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.player .slider {
+    position: relative;
+    flex: 1;
+    margin: 0 1rem;
+    height: 2px;
+}
+
+.player .slider svg {
+    width: 100%;
+    height: 2px;
+}
+
+.player .progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: width 0.1s linear;
+}
+
+.player span {
+    color: white;
+    font-family: "Satoshi", sans-serif;
+    font-weight: 300;
+    font-size: 0.9rem;
+    min-width: 45px;
+}

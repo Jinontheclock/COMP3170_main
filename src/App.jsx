@@ -19,11 +19,6 @@ function App() {
                 <section>
                     <Carousel isEditing={isEditing} />
                 </section>
-
-                <section>
-                    <Player />
-                </section>
-                
                 <button onClick={toggleEdit} className='edit-button'>
                     {isEditing ? "Done" : "Edit"}
                 </button>

@@ -176,6 +176,51 @@ class YouTubeService {
             throw error;
         }
     }
+
+    // Add these methods to your existing YouTubeService class
+
+    // Load and initialize YouTube IFrame Player API
+    async loadPlayerAPI() {
+        if (window.YT && window.YT.Player) {
+            return;
+        }
+
+        return new Promise((resolve) => {
+            const tag = document.createElement("script");
+            tag.src = "https://www.youtube.com/iframe_api";
+            const firstScriptTag = document.getElementsByTagName("script")[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+            window.onYouTubeIframeAPIReady = () => {
+                resolve();
+            };
+        });
+    }
+
+    // Create a YouTube player
+    async createPlayer(elementId, videoId, options = {}) {
+        if (!window.YT || !window.YT.Player) {
+            throw new Error("YouTube API not loaded");
+        }
+
+        return new Promise((resolve, reject) => {
+            const player = new window.YT.Player(elementId, {
+                height: "0",
+                width: "0",
+                videoId: videoId,
+                playerVars: {
+                    autoplay: 0,
+                    controls: 0,
+                    ...options.playerVars,
+                },
+                events: {
+                    onReady: (event) => resolve(event.target),
+                    onStateChange: options.onStateChange || null,
+                    onError: (event) => reject(event),
+                },
+            });
+        });
+    }
 }
 
 export default new YouTubeService();

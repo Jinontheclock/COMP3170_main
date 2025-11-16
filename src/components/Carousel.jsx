@@ -11,29 +11,67 @@ const Carousel = ({
     setCurrentIndex: setExternalIndex,
 }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [playList, setPlaylist] = useState(
-        "PLgzTt0k8mXzEk586ze4BjvDXR7c-TUSnx"
-    );
     const [albumData, setAlbumData] = useState([]);
     const [currentVideoId, setCurrentVideoId] = useState(null);
 
     useEffect(() => {
-        const fetchPlaylistItems = async () => {
+        // Load playlist from localStorage
+        const savedPlaylist = localStorage.getItem("myPlaylist");
+        if (savedPlaylist) {
             try {
-                const data = await youtubeService.getPlaylistItems(playList);
-                console.log("Playlist Items:", data);
-                const items = data.items || [];
+                const items = JSON.parse(savedPlaylist);
                 setAlbumData(items);
                 if (onPlaylistLoad) {
                     onPlaylistLoad(items);
                 }
             } catch (error) {
-                console.error("Error fetching playlist:", error);
+                console.error(
+                    "Error parsing playlist from localStorage:",
+                    error
+                );
+            }
+        }
+
+        // Listen for storage changes (from other tabs/windows)
+        const handleStorageChange = (e) => {
+            if (e.key === "myPlaylist") {
+                const items = e.newValue ? JSON.parse(e.newValue) : [];
+                setAlbumData(items);
+                if (onPlaylistLoad) {
+                    onPlaylistLoad(items);
+                }
             }
         };
 
-        fetchPlaylistItems();
-    }, [playList, onPlaylistLoad]);
+        // Listen for custom playlist update event (from same window)
+        const handlePlaylistUpdated = () => {
+            const savedPlaylist = localStorage.getItem("myPlaylist");
+            if (savedPlaylist) {
+                try {
+                    const items = JSON.parse(savedPlaylist);
+                    setAlbumData(items);
+                    if (onPlaylistLoad) {
+                        onPlaylistLoad(items);
+                    }
+                } catch (error) {
+                    console.error(
+                        "Error parsing playlist from localStorage:",
+                        error
+                    );
+                }
+            }
+        };
+
+        window.addEventListener("storage", handleStorageChange);
+        window.addEventListener("playlistUpdated", handlePlaylistUpdated);
+        return () => {
+            window.removeEventListener("storage", handleStorageChange);
+            window.removeEventListener(
+                "playlistUpdated",
+                handlePlaylistUpdated
+            );
+        };
+    }, [onPlaylistLoad]);
 
     useEffect(() => {
         if (externalIndex !== undefined && externalIndex !== currentIndex) {
@@ -45,7 +83,10 @@ const Carousel = ({
         if (albumData.length > 0) {
             const currentAlbum = albumData[currentIndex];
             if (currentAlbum) {
-                const videoId = currentAlbum.snippet?.resourceId?.videoId;
+                // Handle both YouTube search result format (id.videoId) and YouTube playlist format (snippet.resourceId.videoId)
+                const videoId =
+                    currentAlbum.id?.videoId ||
+                    currentAlbum.snippet?.resourceId?.videoId;
                 if (videoId) {
                     setCurrentVideoId(videoId);
                 }
@@ -112,13 +153,52 @@ const Carousel = ({
     const currentAlbum = albumData[currentIndex];
 
     if (albumData.length === 0) {
-        return <div className='carousel-container'>Loading...</div>;
+        return (
+            <div className='carousel-container'>
+                <div className='empty-carousel'>
+                    <p>Your playlist is empty</p>
+                    <p>Use the search button to add songs to your playlist!</p>
+                </div>
+            </div>
+        );
     }
 
     const handlePlayVideo = (album) => {
         const videoId = album.snippet?.resourceId?.videoId;
         if (videoId) {
             setCurrentVideoId(videoId);
+        }
+    };
+
+    const handleDeleteFromPlaylist = (videoId, e) => {
+        e.stopPropagation();
+
+        // Find the video to delete - handle both YouTube playlist format and search result format
+        const videoToDelete = albumData.find((item) => {
+            const id = item.id?.videoId || item.id;
+            return id === videoId;
+        });
+
+        if (!videoToDelete) return;
+
+        const updatedPlaylist = albumData.filter((item) => {
+            const id = item.id?.videoId || item.id;
+            return id !== videoId;
+        });
+
+        setAlbumData(updatedPlaylist);
+        localStorage.setItem("myPlaylist", JSON.stringify(updatedPlaylist));
+
+        // Reset index if needed
+        if (
+            currentIndex >= updatedPlaylist.length &&
+            updatedPlaylist.length > 0
+        ) {
+            const newIndex = updatedPlaylist.length - 1;
+            setCurrentIndex(newIndex);
+            if (setExternalIndex) {
+                setExternalIndex(newIndex);
+            }
         }
     };
 
@@ -138,11 +218,35 @@ const Carousel = ({
                             }}
                         >
                             {isEditing && (
-                                <button className='album-delete'>X</button>
+                                <button
+                                    className='album-delete'
+                                    onClick={(e) => {
+                                        const videoId =
+                                            album.id?.videoId || album.id;
+                                        handleDeleteFromPlaylist(videoId, e);
+                                    }}
+                                >
+                                    X
+                                </button>
                             )}
                             {album.snippet?.thumbnails?.maxres?.url ? (
                                 <img
                                     src={album.snippet.thumbnails.maxres.url}
+                                    alt={album.snippet.title}
+                                />
+                            ) : album.snippet?.thumbnails?.high?.url ? (
+                                <img
+                                    src={album.snippet.thumbnails.high.url}
+                                    alt={album.snippet.title}
+                                />
+                            ) : album.snippet?.thumbnails?.medium?.url ? (
+                                <img
+                                    src={album.snippet.thumbnails.medium.url}
+                                    alt={album.snippet.title}
+                                />
+                            ) : album.snippet?.thumbnails?.default?.url ? (
+                                <img
+                                    src={album.snippet.thumbnails.default.url}
                                     alt={album.snippet.title}
                                 />
                             ) : (
@@ -167,6 +271,7 @@ const Carousel = ({
                     </h3>
                     <p className='track-artist'>
                         {currentAlbum?.snippet?.videoOwnerChannelTitle ||
+                            currentAlbum?.snippet?.channelTitle ||
                             "Unknown Artist"}
                     </p>
                 </div>

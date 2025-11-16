@@ -59,16 +59,6 @@ function App() {
                     />
                 </section>
 
-                {/* <section>
-                    <Player
-                        currentTrack={currentTrack}
-                        isPlaying={isPlaying}
-                        onPlayPause={handlePlayPause}
-                        onNext={handleNext}
-                        onPrev={handlePrev}
-                    />
-                </section> */}
-
                 <button onClick={toggleEdit} className='edit-button'>
                     {isEditing ? "Done" : "Edit"}
                 </button>

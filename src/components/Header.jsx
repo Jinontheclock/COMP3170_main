@@ -104,6 +104,10 @@ const Header = () => {
 
         playlist.push(video);
         localStorage.setItem("myPlaylist", JSON.stringify(playlist));
+
+        // Dispatch custom event to notify Carousel of changes
+        window.dispatchEvent(new Event("playlistUpdated"));
+
         alert("Added to playlist!");
     };
 

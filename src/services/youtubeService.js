@@ -1,17 +1,26 @@
 class YouTubeService {
     constructor() {
+<<<<<<< HEAD
         // 환경 변수에서 API 키 가져오기, 없으면 하드코딩된 키 사용
+=======
+>>>>>>> Nov12
         this.apiKey =
             import.meta.env.VITE_YOUTUBE_API_KEY ||
             "AIzaSyAyMl7DW2MY3H186sbJ43_FkHiAH4z93FI";
         this.baseUrl = "https://www.googleapis.com/youtube/v3";
 
+<<<<<<< HEAD
         // 디버깅을 위한 로그
+=======
+>>>>>>> Nov12
         console.log("YouTube API Key:", this.apiKey);
         console.log("Environment variables:", import.meta.env);
     }
 
+<<<<<<< HEAD
     // 음악 검색
+=======
+>>>>>>> Nov12
     async searchMusic(query, maxResults = 20) {
         try {
             const response = await fetch(
@@ -34,7 +43,10 @@ class YouTubeService {
         }
     }
 
+<<<<<<< HEAD
     // 인기 음악 동영상 가져오기
+=======
+>>>>>>> Nov12
     async getPopularMusic(maxResults = 20) {
         try {
             const response = await fetch(
@@ -53,7 +65,10 @@ class YouTubeService {
         }
     }
 
+<<<<<<< HEAD
     // 특정 동영상 정보 가져오기
+=======
+>>>>>>> Nov12
     async getVideoDetails(videoId) {
         try {
             const response = await fetch(
@@ -72,7 +87,10 @@ class YouTubeService {
         }
     }
 
+<<<<<<< HEAD
     // 재생 시간을 초 단위로 변환
+=======
+>>>>>>> Nov12
     parseDuration(duration) {
         const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
         if (!match) return 0;
@@ -84,14 +102,20 @@ class YouTubeService {
         return hours * 3600 + minutes * 60 + seconds;
     }
 
+<<<<<<< HEAD
     // 초를 MM:SS 형식으로 변환
+=======
+>>>>>>> Nov12
     formatDuration(seconds) {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
         return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
     }
 
+<<<<<<< HEAD
     // 조회수를 포맷팅
+=======
+>>>>>>> Nov12
     formatViewCount(viewCount) {
         const count = parseInt(viewCount);
         if (count >= 1000000) {
@@ -102,7 +126,10 @@ class YouTubeService {
         return count.toString();
     }
 
+<<<<<<< HEAD
     // 좋아요 수를 포맷팅
+=======
+>>>>>>> Nov12
     formatLikeCount(likeCount) {
         const count = parseInt(likeCount);
         if (count >= 1000000) {
@@ -113,17 +140,26 @@ class YouTubeService {
         return count.toString();
     }
 
+<<<<<<< HEAD
     // YouTube 동영상 URL 생성
+=======
+>>>>>>> Nov12
     getVideoUrl(videoId) {
         return `https://www.youtube.com/watch?v=${videoId}`;
     }
 
+<<<<<<< HEAD
     // YouTube 임베드 URL 생성
+=======
+>>>>>>> Nov12
     getEmbedUrl(videoId) {
         return `https://www.youtube.com/embed/${videoId}`;
     }
 
+<<<<<<< HEAD
     // 썸네일 URL 가져오기
+=======
+>>>>>>> Nov12
     getThumbnailUrl(thumbnails, quality = "medium") {
         if (!thumbnails) return "/default-thumbnail.png";
 
@@ -135,13 +171,20 @@ class YouTubeService {
         );
     }
 
+<<<<<<< HEAD
     // 음악 장르별 검색
     async searchMusicByGenre(genre, maxResults = 20) {
+=======
+    searchMusicByGenre(genre, maxResults = 20) {
+>>>>>>> Nov12
         const query = `${genre} music`;
         return this.searchMusic(query, maxResults);
     }
 
+<<<<<<< HEAD
     // 최신 음악 검색
+=======
+>>>>>>> Nov12
     async getLatestMusic(maxResults = 20) {
         try {
             const response = await fetch(
@@ -176,6 +219,7 @@ class YouTubeService {
             throw error;
         }
     }
+<<<<<<< HEAD
 
     // Add these methods to your existing YouTubeService class
 
@@ -221,6 +265,8 @@ class YouTubeService {
             });
         });
     }
+=======
+>>>>>>> Nov12
 }
 
 export default new YouTubeService();

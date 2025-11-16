@@ -1,21 +1,30 @@
 import "./Carousel.css";
 import { useState, useEffect } from "react";
 import youtubeService from "../services/youtubeService";
+<<<<<<< HEAD
 import Player from "./Player";
 
 const Carousel = ({ isEditing = false }) => {
+=======
+
+const Carousel = ({ isEditing = false, onTrackSelect, onPlaylistLoad, currentIndex: externalIndex, setCurrentIndex: setExternalIndex }) => {
+>>>>>>> Nov12
     const [currentIndex, setCurrentIndex] = useState(0);
     const [playList, setPlaylist] = useState(
         "PLgzTt0k8mXzEk586ze4BjvDXR7c-TUSnx"
     );
     const [albumData, setAlbumData] = useState([]);
+<<<<<<< HEAD
     const [currentVideoId, setCurrentVideoId] = useState(null);
+=======
+>>>>>>> Nov12
 
     useEffect(() => {
         const fetchPlaylistItems = async () => {
             try {
                 const data = await youtubeService.getPlaylistItems(playList);
                 console.log("Playlist Items:", data);
+<<<<<<< HEAD
                 setAlbumData(data.items || []);
                 // Auto-load first video
                 if (data.items && data.items.length > 0) {
@@ -24,6 +33,12 @@ const Carousel = ({ isEditing = false }) => {
                     if (firstVideoId) {
                         setCurrentVideoId(firstVideoId);
                     }
+=======
+                const items = data.items || [];
+                setAlbumData(items);
+                if (onPlaylistLoad) {
+                    onPlaylistLoad(items);
+>>>>>>> Nov12
                 }
             } catch (error) {
                 console.error("Error fetching playlist:", error);
@@ -31,6 +46,7 @@ const Carousel = ({ isEditing = false }) => {
         };
 
         fetchPlaylistItems();
+<<<<<<< HEAD
     }, [playList]);
 
     const nextSlide = () => {
@@ -39,15 +55,56 @@ const Carousel = ({ isEditing = false }) => {
         setCurrentIndex(nextIndex);
         if (albumData[nextIndex]) {
             handlePlayVideo(albumData[nextIndex]);
+=======
+    }, [playList, onPlaylistLoad]);
+
+    useEffect(() => {
+        if (externalIndex !== undefined && externalIndex !== currentIndex) {
+            setCurrentIndex(externalIndex);
+        }
+    }, [externalIndex]);
+
+    const nextSlide = () => {
+        const newIndex = currentIndex === albumData.length - 1 ? 0 : currentIndex + 1;
+        setCurrentIndex(newIndex);
+        if (setExternalIndex) {
+            setExternalIndex(newIndex);
+        }
+        if (onTrackSelect && albumData[newIndex]) {
+            onTrackSelect(albumData[newIndex], newIndex);
+>>>>>>> Nov12
         }
     };
 
     const prevSlide = () => {
+<<<<<<< HEAD
         const prevIndex =
             currentIndex === 0 ? albumData.length - 1 : currentIndex - 1;
         setCurrentIndex(prevIndex);
         if (albumData[prevIndex]) {
             handlePlayVideo(albumData[prevIndex]);
+=======
+        const newIndex = currentIndex === 0 ? albumData.length - 1 : currentIndex - 1;
+        setCurrentIndex(newIndex);
+        if (setExternalIndex) {
+            setExternalIndex(newIndex);
+        }
+        if (onTrackSelect && albumData[newIndex]) {
+            onTrackSelect(albumData[newIndex], newIndex);
+        }
+    };
+
+    const handleAlbumClick = (album, index) => {
+        if (!isEditing) {
+            const actualIndex = (currentIndex + index - 2 + albumData.length) % albumData.length;
+            setCurrentIndex(actualIndex);
+            if (setExternalIndex) {
+                setExternalIndex(actualIndex);
+            }
+            if (onTrackSelect) {
+                onTrackSelect(album, actualIndex);
+            }
+>>>>>>> Nov12
         }
     };
 
@@ -74,6 +131,7 @@ const Carousel = ({ isEditing = false }) => {
         return <div className='carousel-container'>Loading...</div>;
     }
 
+<<<<<<< HEAD
     const handlePlayVideo = (album) => {
         const videoId = album.snippet?.resourceId?.videoId;
         if (videoId) {
@@ -81,6 +139,8 @@ const Carousel = ({ isEditing = false }) => {
         }
     };
 
+=======
+>>>>>>> Nov12
     return (
         <div className='carousel-container'>
             <div className='carousel'>
@@ -91,7 +151,12 @@ const Carousel = ({ isEditing = false }) => {
                             className={`album-cover ${
                                 album.isCenter ? "center" : "side"
                             }`}
+<<<<<<< HEAD
                             onClick={() => handlePlayVideo(album)}
+=======
+                            onClick={() => handleAlbumClick(album, index)}
+                            style={{ cursor: isEditing ? 'default' : 'pointer' }}
+>>>>>>> Nov12
                         >
                             {isEditing && (
                                 <button className='album-delete'>X</button>
@@ -130,11 +195,14 @@ const Carousel = ({ isEditing = false }) => {
                     ›
                 </button>
             </div>
+<<<<<<< HEAD
             <Player
                 videoId={currentVideoId}
                 onPrev={prevSlide}
                 onNext={nextSlide}
             />
+=======
+>>>>>>> Nov12
         </div>
     );
 };

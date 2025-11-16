@@ -6,20 +6,15 @@ import "./App.css";
 
 function App() {
     const [isEditing, setIsEditing] = useState(false);
-<<<<<<< HEAD
-=======
     const [currentTrack, setCurrentTrack] = useState(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [playlist, setPlaylist] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
->>>>>>> Nov12
 
     const toggleEdit = () => {
         setIsEditing(!isEditing);
     };
 
-<<<<<<< HEAD
-=======
     const handleTrackSelect = (track, index) => {
         setCurrentTrack(track);
         setCurrentIndex(index);
@@ -41,25 +36,21 @@ function App() {
 
     const handlePrev = () => {
         if (playlist.length > 0) {
-            const prevIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+            const prevIndex =
+                (currentIndex - 1 + playlist.length) % playlist.length;
             setCurrentIndex(prevIndex);
             setCurrentTrack(playlist[prevIndex]);
             setIsPlaying(true);
         }
     };
 
->>>>>>> Nov12
     return (
         <div>
             <Header />
             <main>
                 <h1>October Playlist</h1>
                 <section>
-<<<<<<< HEAD
-                    <Carousel isEditing={isEditing} />
-                </section>
-=======
-                    <Carousel 
+                    <Carousel
                         isEditing={isEditing}
                         onTrackSelect={handleTrackSelect}
                         onPlaylistLoad={setPlaylist}
@@ -68,17 +59,16 @@ function App() {
                     />
                 </section>
 
-                <section>
-                    <Player 
+                {/* <section>
+                    <Player
                         currentTrack={currentTrack}
                         isPlaying={isPlaying}
                         onPlayPause={handlePlayPause}
                         onNext={handleNext}
                         onPrev={handlePrev}
                     />
-                </section>
-                
->>>>>>> Nov12
+                </section> */}
+
                 <button onClick={toggleEdit} className='edit-button'>
                     {isEditing ? "Done" : "Edit"}
                 </button>

@@ -1,44 +1,31 @@
 import "./Carousel.css";
 import { useState, useEffect } from "react";
 import youtubeService from "../services/youtubeService";
-<<<<<<< HEAD
 import Player from "./Player";
 
-const Carousel = ({ isEditing = false }) => {
-=======
-
-const Carousel = ({ isEditing = false, onTrackSelect, onPlaylistLoad, currentIndex: externalIndex, setCurrentIndex: setExternalIndex }) => {
->>>>>>> Nov12
+const Carousel = ({
+    isEditing = false,
+    onTrackSelect,
+    onPlaylistLoad,
+    currentIndex: externalIndex,
+    setCurrentIndex: setExternalIndex,
+}) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [playList, setPlaylist] = useState(
         "PLgzTt0k8mXzEk586ze4BjvDXR7c-TUSnx"
     );
     const [albumData, setAlbumData] = useState([]);
-<<<<<<< HEAD
     const [currentVideoId, setCurrentVideoId] = useState(null);
-=======
->>>>>>> Nov12
 
     useEffect(() => {
         const fetchPlaylistItems = async () => {
             try {
                 const data = await youtubeService.getPlaylistItems(playList);
                 console.log("Playlist Items:", data);
-<<<<<<< HEAD
-                setAlbumData(data.items || []);
-                // Auto-load first video
-                if (data.items && data.items.length > 0) {
-                    const firstVideoId =
-                        data.items[0].snippet?.resourceId?.videoId;
-                    if (firstVideoId) {
-                        setCurrentVideoId(firstVideoId);
-                    }
-=======
                 const items = data.items || [];
                 setAlbumData(items);
                 if (onPlaylistLoad) {
                     onPlaylistLoad(items);
->>>>>>> Nov12
                 }
             } catch (error) {
                 console.error("Error fetching playlist:", error);
@@ -46,16 +33,6 @@ const Carousel = ({ isEditing = false, onTrackSelect, onPlaylistLoad, currentInd
         };
 
         fetchPlaylistItems();
-<<<<<<< HEAD
-    }, [playList]);
-
-    const nextSlide = () => {
-        const nextIndex =
-            currentIndex === albumData.length - 1 ? 0 : currentIndex + 1;
-        setCurrentIndex(nextIndex);
-        if (albumData[nextIndex]) {
-            handlePlayVideo(albumData[nextIndex]);
-=======
     }, [playList, onPlaylistLoad]);
 
     useEffect(() => {
@@ -64,27 +41,33 @@ const Carousel = ({ isEditing = false, onTrackSelect, onPlaylistLoad, currentInd
         }
     }, [externalIndex]);
 
+    useEffect(() => {
+        if (albumData.length > 0) {
+            const currentAlbum = albumData[currentIndex];
+            if (currentAlbum) {
+                const videoId = currentAlbum.snippet?.resourceId?.videoId;
+                if (videoId) {
+                    setCurrentVideoId(videoId);
+                }
+            }
+        }
+    }, [currentIndex, albumData]);
+
     const nextSlide = () => {
-        const newIndex = currentIndex === albumData.length - 1 ? 0 : currentIndex + 1;
+        const newIndex =
+            currentIndex === albumData.length - 1 ? 0 : currentIndex + 1;
         setCurrentIndex(newIndex);
         if (setExternalIndex) {
             setExternalIndex(newIndex);
         }
         if (onTrackSelect && albumData[newIndex]) {
             onTrackSelect(albumData[newIndex], newIndex);
->>>>>>> Nov12
         }
     };
 
     const prevSlide = () => {
-<<<<<<< HEAD
-        const prevIndex =
+        const newIndex =
             currentIndex === 0 ? albumData.length - 1 : currentIndex - 1;
-        setCurrentIndex(prevIndex);
-        if (albumData[prevIndex]) {
-            handlePlayVideo(albumData[prevIndex]);
-=======
-        const newIndex = currentIndex === 0 ? albumData.length - 1 : currentIndex - 1;
         setCurrentIndex(newIndex);
         if (setExternalIndex) {
             setExternalIndex(newIndex);
@@ -96,7 +79,9 @@ const Carousel = ({ isEditing = false, onTrackSelect, onPlaylistLoad, currentInd
 
     const handleAlbumClick = (album, index) => {
         if (!isEditing) {
-            const actualIndex = (currentIndex + index - 2 + albumData.length) % albumData.length;
+            const actualIndex =
+                (currentIndex + index - 2 + albumData.length) %
+                albumData.length;
             setCurrentIndex(actualIndex);
             if (setExternalIndex) {
                 setExternalIndex(actualIndex);
@@ -104,7 +89,6 @@ const Carousel = ({ isEditing = false, onTrackSelect, onPlaylistLoad, currentInd
             if (onTrackSelect) {
                 onTrackSelect(album, actualIndex);
             }
->>>>>>> Nov12
         }
     };
 
@@ -131,7 +115,6 @@ const Carousel = ({ isEditing = false, onTrackSelect, onPlaylistLoad, currentInd
         return <div className='carousel-container'>Loading...</div>;
     }
 
-<<<<<<< HEAD
     const handlePlayVideo = (album) => {
         const videoId = album.snippet?.resourceId?.videoId;
         if (videoId) {
@@ -139,8 +122,6 @@ const Carousel = ({ isEditing = false, onTrackSelect, onPlaylistLoad, currentInd
         }
     };
 
-=======
->>>>>>> Nov12
     return (
         <div className='carousel-container'>
             <div className='carousel'>
@@ -151,12 +132,10 @@ const Carousel = ({ isEditing = false, onTrackSelect, onPlaylistLoad, currentInd
                             className={`album-cover ${
                                 album.isCenter ? "center" : "side"
                             }`}
-<<<<<<< HEAD
-                            onClick={() => handlePlayVideo(album)}
-=======
                             onClick={() => handleAlbumClick(album, index)}
-                            style={{ cursor: isEditing ? 'default' : 'pointer' }}
->>>>>>> Nov12
+                            style={{
+                                cursor: isEditing ? "default" : "pointer",
+                            }}
                         >
                             {isEditing && (
                                 <button className='album-delete'>X</button>
@@ -195,14 +174,11 @@ const Carousel = ({ isEditing = false, onTrackSelect, onPlaylistLoad, currentInd
                     ›
                 </button>
             </div>
-<<<<<<< HEAD
             <Player
                 videoId={currentVideoId}
                 onPrev={prevSlide}
                 onNext={nextSlide}
             />
-=======
->>>>>>> Nov12
         </div>
     );
 };

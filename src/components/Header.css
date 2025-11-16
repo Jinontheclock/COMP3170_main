@@ -50,9 +50,6 @@
 
 .menu-sidebar {
     right: 0;
-<<<<<<< HEAD
-    width: 250px;
-=======
     width: 450px;
     overflow-y: auto;
 }
@@ -112,26 +109,14 @@
 
 .back-button:hover {
     background: rgba(255, 255, 255, 0.2);
->>>>>>> Nov12
 }
 
 .search-container {
     display: flex;
     align-items: center;
-<<<<<<< HEAD
-    gap: 1rem;
     margin-bottom: 2rem;
 }
 
-.search-icon {
-    font-size: 1.2rem;
-}
-
-=======
-    margin-bottom: 2rem;
-}
-
->>>>>>> Nov12
 .search-input {
     background: none;
     border: none;
@@ -139,10 +124,7 @@
     font-size: 1rem;
     outline: none;
     flex: 1;
-<<<<<<< HEAD
-=======
     width: 100%;
->>>>>>> Nov12
 }
 
 .search-input::placeholder {
@@ -159,15 +141,12 @@
     gap: 1rem;
     padding: 0.5rem 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-<<<<<<< HEAD
-=======
     cursor: pointer;
     transition: background 0.2s ease;
 }
 
 .search-item:hover {
     background: rgba(255, 255, 255, 0.1);
->>>>>>> Nov12
 }
 
 .album-placeholder {
@@ -175,59 +154,27 @@
     height: 40px;
     background: #333;
     border-radius: 4px;
-<<<<<<< HEAD
-=======
     flex-shrink: 0;
     object-fit: cover;
->>>>>>> Nov12
 }
 
 .track-info {
     flex: 1;
-<<<<<<< HEAD
-=======
     min-width: 0;
->>>>>>> Nov12
 }
 
 .song-name {
     color: white;
     font-weight: 500;
     margin-bottom: 0.2rem;
-<<<<<<< HEAD
-=======
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
->>>>>>> Nov12
 }
 
 .artist-name {
     color: rgba(255, 255, 255, 0.6);
     font-size: 0.9rem;
-<<<<<<< HEAD
-}
-
-.add-btn, .remove-btn, .play-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 0.2rem;
-    transition: all 0.2s ease;
-}
-
-.play-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-=======
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -239,7 +186,8 @@
     align-items: center;
 }
 
-.add-to-playlist-btn, .play-btn {
+.add-to-playlist-btn,
+.play-btn {
     background: rgba(255, 255, 255, 0.1);
     border: none;
     color: white;
@@ -262,7 +210,6 @@
 .add-to-playlist-btn:hover {
     background: rgba(76, 175, 80, 0.4);
     transform: scale(1.1);
->>>>>>> Nov12
 }
 
 .play-btn:hover {
@@ -291,27 +238,8 @@
     font-size: 0.9rem;
 }
 
-<<<<<<< HEAD
-.menu-content {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.menu-item {
-    color: white;
-    padding: 0.5rem 0;
-    cursor: pointer;
-}
-
-.menu-item.bold {
-    font-weight: bold;
-    font-size: 1.1rem;
-}
-
-=======
->>>>>>> Nov12
-.loading-message, .error-message {
+.loading-message,
+.error-message {
     color: white;
     text-align: center;
     padding: 1rem;
@@ -334,27 +262,6 @@
     padding: 2rem;
 }
 
-<<<<<<< HEAD
-.search-item {
-    cursor: pointer;
-    transition: background 0.2s ease;
-}
-
-.search-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.album-placeholder {
-    width: 40px;
-    height: 40px;
-    background: #333;
-    border-radius: 4px;
-    flex-shrink: 0;
-    object-fit: cover;
-}
-
-=======
->>>>>>> Nov12
 @keyframes slideIn {
     from {
         transform: translateX(-100%);

@@ -1,51 +1,75 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import youtubeService from "../services/youtubeService";
 import "./PlaylistManager.css";
 
-const PlaylistManager = () => {
+const PlaylistManager = ({ onPlaySong, onStopSong }) => {
     const [playlist, setPlaylist] = useState([]);
     const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
+    const isExternalUpdateRef = useRef(false);
 
     useEffect(() => {
-        const savedPlaylist = localStorage.getItem("myPlaylist");
-        if (savedPlaylist) {
-            setPlaylist(JSON.parse(savedPlaylist));
-        }
+        // Load playlist from localStorage on mount
+        const loadPlaylist = () => {
+            const savedPlaylist = localStorage.getItem("myPlaylist");
+            if (savedPlaylist) {
+                try {
+                    const parsed = JSON.parse(savedPlaylist);
+                    isExternalUpdateRef.current = true;
+                    setPlaylist(parsed);
+                } catch (error) {
+                    console.error("Error parsing playlist:", error);
+                }
+            }
+        };
+
+        loadPlaylist();
+
+        // Listen for playlist updates from other components (Header)
+        window.addEventListener("playlistUpdated", loadPlaylist);
+
+        return () => {
+            window.removeEventListener("playlistUpdated", loadPlaylist);
+        };
     }, []);
 
     useEffect(() => {
+        // Skip writing to localStorage if this is an external update
+        if (isExternalUpdateRef.current) {
+            isExternalUpdateRef.current = false;
+            return;
+        }
+
         localStorage.setItem("myPlaylist", JSON.stringify(playlist));
         // Dispatch event to notify other components of changes
         window.dispatchEvent(new Event("playlistUpdated"));
     }, [playlist]);
 
-    const removeFromPlaylist = (videoId) => {
-        setPlaylist(
-            playlist.filter((item) => {
-                const id = item.id?.videoId || item.id;
-                return id !== videoId;
-            })
-        );
-
+    const playVideo = (video) => {
+        const videoId = video.id?.videoId || video.id;
         const currentVideoId =
             currentlyPlaying?.id?.videoId || currentlyPlaying?.id;
+
+        // If clicking the same video, toggle it off (pause)
         if (currentVideoId === videoId) {
             setCurrentlyPlaying(null);
+            // Call stop callback to stop the carousel player
+            if (onStopSong) {
+                onStopSong();
+            }
+            return;
         }
-    };
 
-    const playVideo = (video) => {
+        // Otherwise, play the new video
         setCurrentlyPlaying(video);
-    };
-
-    const clearPlaylist = () => {
-        if (
-            window.confirm(
-                "Are you sure you want to clear the entire playlist?"
-            )
-        ) {
-            setPlaylist([]);
-            setCurrentlyPlaying(null);
+        // Find the index of the video in the playlist and call the callback
+        if (onPlaySong) {
+            const index = playlist.findIndex((item) => {
+                const id = item.id?.videoId || item.id;
+                return id === videoId;
+            });
+            if (index !== -1) {
+                onPlaySong(video, index);
+            }
         }
     };
 
@@ -66,17 +90,13 @@ const PlaylistManager = () => {
                             ✕
                         </button>
                     </div>
-                    <div className='video-player'>
-                        <iframe
-                            src={youtubeService.getEmbedUrl(
-                                currentlyPlaying.id?.videoId ||
-                                    currentlyPlaying.id
+                    <div className='player-image'>
+                        <img
+                            src={youtubeService.getThumbnailUrl(
+                                currentlyPlaying.snippet.thumbnails
                             )}
-                            title={currentlyPlaying.snippet.title}
-                            frameBorder='0'
-                            allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                            allowFullScreen
-                        ></iframe>
+                            alt={currentlyPlaying.snippet.title}
+                        />
                     </div>
                     <div className='player-info'>
                         <h4>{currentlyPlaying.snippet.title}</h4>
@@ -88,14 +108,6 @@ const PlaylistManager = () => {
             <div className='playlist-section'>
                 <div className='playlist-section-header'>
                     <h2>Playlist ({playlist.length} tracks)</h2>
-                    {playlist.length > 0 && (
-                        <button
-                            onClick={clearPlaylist}
-                            className='clear-all-button'
-                        >
-                            Clear All
-                        </button>
-                    )}
                 </div>
 
                 {playlist.length === 0 ? (
@@ -107,8 +119,12 @@ const PlaylistManager = () => {
                     <div className='playlist-grid'>
                         {playlist.map((video, index) => {
                             const videoId = video.id?.videoId || video.id;
+                            const key =
+                                typeof videoId === "string"
+                                    ? videoId
+                                    : `video-${index}`;
                             return (
-                                <div key={videoId} className='playlist-item'>
+                                <div key={key} className='playlist-item'>
                                     <div className='item-number'>
                                         {index + 1}
                                     </div>
@@ -132,18 +148,20 @@ const PlaylistManager = () => {
                                         <button
                                             onClick={() => playVideo(video)}
                                             className='play-button'
-                                            title='Play'
-                                        >
-                                            ▶
-                                        </button>
-                                        <button
-                                            onClick={() =>
-                                                removeFromPlaylist(videoId)
+                                            title={
+                                                (currentlyPlaying?.id
+                                                    ?.videoId ||
+                                                    currentlyPlaying?.id) ===
+                                                videoId
+                                                    ? "Pause"
+                                                    : "Play"
                                             }
-                                            className='remove-button'
-                                            title='Remove from playlist'
                                         >
-                                            ✕
+                                            {(currentlyPlaying?.id?.videoId ||
+                                                currentlyPlaying?.id) ===
+                                            videoId
+                                                ? "⏸"
+                                                : "▶"}
                                         </button>
                                     </div>
                                 </div>

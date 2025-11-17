@@ -3,7 +3,7 @@ import youtubeService from "../services/youtubeService";
 import PlaylistManager from "./PlaylistManager";
 import "./Header.css";
 
-const Header = () => {
+const Header = ({ onPlaySong, onStopSong }) => {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchClosing, setIsSearchClosing] = useState(false);
@@ -224,29 +224,10 @@ const Header = () => {
                         isMenuClosing ? "closing" : ""
                     }`}
                 >
-                    {showPlaylistManager ? (
-                        <div className='playlist-manager-wrapper'>
-                            <button
-                                className='back-button'
-                                onClick={closePlaylistManager}
-                            >
-                                ← Back
-                            </button>
-                            <PlaylistManager />
-                        </div>
-                    ) : (
-                        <div className='menu-content'>
-                            <div className='menu-item'>Profile</div>
-                            <div className='menu-item bold'>Bob Ross</div>
-                            <div className='menu-item'>Spotify Account</div>
-                            <div
-                                className='menu-item playlist-menu'
-                                onClick={openPlaylistManager}
-                            >
-                                Playlist Manager
-                            </div>
-                        </div>
-                    )}
+                    <PlaylistManager
+                        onPlaySong={onPlaySong}
+                        onStopSong={onStopSong}
+                    />
                 </div>
             )}
         </>

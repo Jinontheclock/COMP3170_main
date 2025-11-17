@@ -10,6 +10,7 @@ function App() {
     const [isPlaying, setIsPlaying] = useState(false);
     const [playlist, setPlaylist] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [shouldStop, setShouldStop] = useState(false);
 
     const toggleEdit = () => {
         setIsEditing(!isEditing);
@@ -44,9 +45,18 @@ function App() {
         }
     };
 
+    const handleStopSong = () => {
+        setCurrentTrack(null);
+        setIsPlaying(false);
+        setShouldStop(true);
+    };
+
     return (
         <div>
-            <Header />
+            <Header
+                onPlaySong={handleTrackSelect}
+                onStopSong={handleStopSong}
+            />
             <main>
                 <h1>October Playlist</h1>
                 <section>
@@ -56,6 +66,10 @@ function App() {
                         onPlaylistLoad={setPlaylist}
                         currentIndex={currentIndex}
                         setCurrentIndex={setCurrentIndex}
+                        shouldStop={shouldStop}
+                        setShouldStop={setShouldStop}
+                        isPlaying={isPlaying}
+                        setIsPlaying={setIsPlaying}
                     />
                 </section>
 

@@ -4,9 +4,6 @@ class YouTubeService {
             import.meta.env.VITE_YOUTUBE_API_KEY ||
             "AIzaSyAyMl7DW2MY3H186sbJ43_FkHiAH4z93FI";
         this.baseUrl = "https://www.googleapis.com/youtube/v3";
-
-        console.log("YouTube API Key:", this.apiKey);
-        console.log("Environment variables:", import.meta.env);
     }
 
     async searchMusic(query, maxResults = 20) {

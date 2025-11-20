@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import youtubeService from '../services/youtubeService';
-import './YouTubeSearch.css';
+import './youTubeSearch.css';
 
 const YouTubeSearch = ({ isOpen, onClose, onSearchResults }) => {
   const [query, setQuery] = useState('');
@@ -26,7 +26,7 @@ const YouTubeSearch = ({ isOpen, onClose, onSearchResults }) => {
       console.error('Search error:', err);
     } finally {
       setLoading(false);
-    }ㄷ
+    }
   };
 
   const handleVideoSelect = (video) => {

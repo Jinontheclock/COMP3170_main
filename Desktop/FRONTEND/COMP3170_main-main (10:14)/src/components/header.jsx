@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import youtubeService from '../services/youtubeService';
-import './Header.css';
+import './header.css';
 
 const Header = () => {
     const [isSearchOpen, setIsSearchOpen] = useState(false);

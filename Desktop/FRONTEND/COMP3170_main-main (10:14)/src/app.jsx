@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Player from "./components/Player";
-import Carousel from "./components/Carousel";
-import Header from "./components/Header";
-import "./App.css";
+import Player from "./components/player";
+import Carousel from "./components/carousel";
+import Header from "./components/header";
+import "./app.css";
 
 function App() {
     const [isEditing, setIsEditing] = useState(false);

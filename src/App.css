@@ -1,0 +1,171 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    transition: background-image 0.4s ease;
+}
+
+main {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-2xl) var(--spacing-lg);
+    transition: background var(--transition-base);
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-light);
+    color: var(--color-white);
+    text-align: center;
+    margin: var(--spacing-lg) 0;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+        margin: 0.5rem 0;
+    }
+}
+
+.edit-button {
+    position: fixed;
+    bottom: 1em;
+    left: 1em;
+    background: var(--bg-glass-dark);
+    border: 1px solid var(--border-dark);
+    color: var(--color-white);
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--border-radius-md);
+    backdrop-filter: var(--backdrop-blur);
+    transition: all var(--transition-fast);
+}
+
+.edit-button:hover {
+    background: var(--bg-glass-dark-hover);
+    border-color: var(--border-dark-hover);
+    transform: translateY(-2px);
+}
+
+body.light-mode .edit-button {
+    background: var(--bg-light-glass);
+    border: 1px solid var(--border-light);
+    color: var(--color-black);
+}
+
+body.light-mode .edit-button:hover {
+    background: var(--bg-light-glass-hover);
+    border-color: var(--border-light-hover);
+}
+
+.notification-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: var(--color-white);
+    padding: var(--spacing-xl) var(--spacing-3xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-modal-dark);
+    backdrop-filter: var(--backdrop-blur-strong);
+    -webkit-backdrop-filter: var(--backdrop-blur-strong);
+    z-index: var(--z-modal);
+    font-size: var(--font-size-md);
+    text-align: center;
+    animation: modalFadeIn var(--transition-base);
+    border: 1px solid var(--border-transparent);
+}
+
+.notification-modal.success {
+    background: var(--color-success);
+}
+
+.notification-modal.error {
+    background: var(--color-error);
+}
+
+body.light-mode .notification-modal {
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--color-black);
+    border: 1px solid var(--border-light-transparent);
+    box-shadow: var(--shadow-modal-light);
+}
+
+body.light-mode .notification-modal.success {
+    background: var(--color-success);
+    color: var(--color-white);
+}
+
+body.light-mode .notification-modal.error {
+    background: var(--color-error);
+    color: var(--color-white);
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.dark-mode h1,
+.dark-mode span,
+.dark-mode p,
+.dark-mode button,
+.dark-mode .playlist-title {
+    color: var(--color-white) !important;
+}
+
+.dark-mode svg,
+.dark-mode img.icon {
+    filter: invert(0);
+}
+
+.light-mode h1,
+.light-mode span,
+.light-mode p,
+.light-mode button,
+.light-mode .playlist-title {
+    color: var(--color-black) !important;
+}
+
+.light-mode svg,
+.light-mode img.icon {
+    filter: invert(1);
+}
+
+.light-mode .progress-bar-track {
+    background: rgba(0,0,0,0.3) !important;
+}
+
+.light-mode .progress-bar-fill {
+    background: var(--color-black) !important;
+}
+
+.light-mode .track-title,
+.light-mode .track-artist {
+    color: var(--color-black) !important;
+}
+
+.light-mode .icon-btn svg {
+    stroke: var(--color-black) !important;
+}
